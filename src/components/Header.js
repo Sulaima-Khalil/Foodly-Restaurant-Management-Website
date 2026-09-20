@@ -3,16 +3,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, Search, User, Shield, LogOut, Utensils } from "lucide-react";
+import { ShoppingBag, User, Shield, Utensils } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const pathname = usePathname();
-  const { user, isLoggedIn, logout, toggleRole } = useAuth();
+  const { user, isLoggedIn, toggleRole } = useAuth();
   const { itemCount } = useCart();
-  const [showSearchModal, setShowSearchModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const isActive = (path) => pathname === path;
 
@@ -27,7 +25,7 @@ export default function Header() {
           Foodly
         </Link>
 
-        {/* Navigation Links */}
+        {/* Dynamic Navigation Links based on Auth State */}
         <nav>
           <ul className="nav-links">
             <li>
@@ -40,17 +38,35 @@ export default function Header() {
                 Restaurants
               </Link>
             </li>
-            <li>
-              <Link href="/dashboard" className={`nav-link ${isActive("/dashboard") ? "active" : ""}`}>
-                User Profile
-              </Link>
-            </li>
-            {user?.role === "admin" && (
-              <li>
-                <Link href="/admin" className={`nav-link ${isActive("/admin") || isActive("/admin/menu") ? "active" : ""}`}>
-                  Admin Panel
-                </Link>
-              </li>
+
+            {!isLoggedIn ? (
+              <>
+                <li>
+                  <Link href="/about" className={`nav-link ${isActive("/about") ? "active" : ""}`}>
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className={`nav-link ${isActive("/contact") ? "active" : ""}`}>
+                    Contact
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link href="/dashboard" className={`nav-link ${isActive("/dashboard") ? "active" : ""}`}>
+                    User Profile
+                  </Link>
+                </li>
+                {user?.role === "admin" && (
+                  <li>
+                    <Link href="/admin" className={`nav-link ${isActive("/admin") || isActive("/admin/menu") ? "active" : ""}`}>
+                      Admin Panel
+                    </Link>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         </nav>
@@ -76,16 +92,17 @@ export default function Header() {
             {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
           </Link>
 
-          {/* User Profile & Login Button */}
+          {/* User Account / Login Button */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            {isLoggedIn && (
+            {isLoggedIn ? (
               <Link href={user?.role === "admin" ? "/admin" : "/dashboard"} className="action-icon-btn" aria-label="User Account">
                 <User size={20} />
               </Link>
+            ) : (
+              <Link href="/login" className="btn-primary" style={{ padding: "0.5rem 1.2rem", fontSize: "0.88rem" }}>
+                Login
+              </Link>
             )}
-            <Link href="/login" className="btn-primary" style={{ padding: "0.5rem 1.2rem", fontSize: "0.88rem" }}>
-              Login
-            </Link>
           </div>
         </div>
       </div>

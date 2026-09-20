@@ -27,6 +27,10 @@ export default function LoginPage() {
         return;
       }
       const res = login(formData.email, formData.password);
+      if (!res.success) {
+        setErrorMsg(res.error);
+        return;
+      }
       if (res.user?.role === "admin") {
         router.push("/admin");
       } else {
@@ -37,7 +41,11 @@ export default function LoginPage() {
         setErrorMsg("Please fill in all fields.");
         return;
       }
-      signup(formData.name, formData.email, formData.password);
+      const res = signup(formData.name, formData.email, formData.password);
+      if (!res.success) {
+        setErrorMsg(res.error);
+        return;
+      }
       router.push("/dashboard");
     }
   };

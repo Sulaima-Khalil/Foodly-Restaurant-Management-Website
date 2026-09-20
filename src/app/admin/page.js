@@ -2,14 +2,24 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Users, Settings, LogOut, DollarSign, ArrowUpRight } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useOrders } from "@/context/OrderContext";
+import LogoutModal from "@/components/LogoutModal";
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const { logout } = useAuth();
   const { orders, updateOrderStatus } = useOrders();
   const [activeTab, setActiveTab] = useState("Dashboard");
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const handleConfirmLogout = () => {
+    logout();
+    setIsLogoutModalOpen(false);
+    router.push("/login");
+  };
 
   const totalOrdersCount = 128 + orders.length - 4;
   const totalRevenueVal = orders.reduce((sum, o) => sum + o.total, 2480);
@@ -60,7 +70,7 @@ export default function AdminDashboardPage() {
                 <Settings size={18} /> Settings
               </button>
             </li>
-            <li className="dash-nav-item" onClick={logout} style={{ color: "#ef4444", marginTop: "1.5rem" }}>
+            <li className="dash-nav-item" onClick={() => setIsLogoutModalOpen(true)} style={{ color: "#ef4444", marginTop: "1.5rem" }}>
               <LogOut size={18} /> Logout
             </li>
           </ul>
@@ -158,6 +168,12 @@ export default function AdminDashboardPage() {
           </div>
         </main>
       </div>
+
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+      />
     </div>
   );
 }

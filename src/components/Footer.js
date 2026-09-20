@@ -1,12 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Utensils, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import LogoutModal from "@/components/LogoutModal";
 
 export default function Footer() {
+  const router = useRouter();
   const { isLoggedIn, logout } = useAuth();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const handleConfirmLogout = () => {
+    logout();
+    setIsLogoutModalOpen(false);
+    router.push("/login");
+  };
 
   return (
     <footer style={{ background: "white", borderTop: "1px solid var(--border-color)", padding: "3rem 0 1.5rem" }}>
@@ -33,7 +43,7 @@ export default function Footer() {
             {isLoggedIn && (
               <li>
                 <button
-                  onClick={logout}
+                  onClick={() => setIsLogoutModalOpen(true)}
                   style={{
                     background: "none",
                     border: "none",
@@ -80,6 +90,13 @@ export default function Footer() {
           Built with Next.js, HTML, CSS & JS
         </p>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+      />
     </footer>
   );
 }
