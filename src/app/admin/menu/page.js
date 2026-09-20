@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Users, Settings, LogOut, Plus, Edit2, Trash2 } from "lucide-react";
+import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Users, Settings, LogOut, Plus, Edit2, Trash2, Store } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useOrders } from "@/context/OrderContext";
 import AddEditItemModal from "@/components/AddEditItemModal";
@@ -49,6 +49,11 @@ export default function AdminMenuPage() {
             <li>
               <Link href="/admin" className="dash-nav-item">
                 <LayoutDashboard size={18} /> Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin" className="dash-nav-item">
+                <Store size={18} /> Restaurants
               </Link>
             </li>
             <li>

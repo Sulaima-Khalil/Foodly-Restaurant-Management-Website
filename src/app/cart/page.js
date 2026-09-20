@@ -104,7 +104,7 @@ export default function CartPage() {
           </div>
           <h2 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: "0.5rem" }}>Your Cart is Empty</h2>
           <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>
-            Looks like you haven't added any delicious food items to your cart yet.
+            Looks like you haven&apos;t added any delicious food items to your cart yet.
           </p>
           <Link href="/restaurants" className="btn-primary">
             Explore Menu & Restaurants

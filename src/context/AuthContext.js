@@ -69,13 +69,22 @@ const DEFAULT_USERS = [
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [registeredUsers, setRegisteredUsers] = useState([]);
 
   useEffect(() => {
     // Initialize LocalStorage Registered Users Database
     const savedRegisteredUsers = localStorage.getItem("foodly_registered_users");
-    if (!savedRegisteredUsers) {
+    let initialUsers = DEFAULT_USERS;
+    if (savedRegisteredUsers) {
+      try {
+        initialUsers = JSON.parse(savedRegisteredUsers);
+      } catch (e) {
+        initialUsers = DEFAULT_USERS;
+      }
+    } else {
       localStorage.setItem("foodly_registered_users", JSON.stringify(DEFAULT_USERS));
     }
+    setRegisteredUsers(initialUsers);
 
     // Initialize Active Session User
     const savedUser = localStorage.getItem("foodly_user");
@@ -97,18 +106,13 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const getRegisteredUsers = () => {
-    try {
-      const saved = localStorage.getItem("foodly_registered_users");
-      return saved ? JSON.parse(saved) : DEFAULT_USERS;
-    } catch (e) {
-      return DEFAULT_USERS;
-    }
+  const syncRegisteredUsers = (newUsers) => {
+    setRegisteredUsers(newUsers);
+    localStorage.setItem("foodly_registered_users", JSON.stringify(newUsers));
   };
 
   const login = (email, password) => {
     const cleanEmail = email.trim().toLowerCase();
-    const registeredUsers = getRegisteredUsers();
 
     // Check matching user credentials
     const foundUser = registeredUsers.find(
@@ -138,7 +142,6 @@ export function AuthProvider({ children }) {
 
   const signup = (name, email, password) => {
     const cleanEmail = email.trim().toLowerCase();
-    const registeredUsers = getRegisteredUsers();
 
     // Check if user already exists
     const existing = registeredUsers.find(
@@ -164,7 +167,7 @@ export function AuthProvider({ children }) {
     };
 
     const updatedUsers = [...registeredUsers, newUser];
-    localStorage.setItem("foodly_registered_users", JSON.stringify(updatedUsers));
+    syncRegisteredUsers(updatedUsers);
 
     setUser(newUser);
     setIsLoggedIn(true);
@@ -192,14 +195,45 @@ export function AuthProvider({ children }) {
       localStorage.setItem("foodly_user", JSON.stringify(updated));
 
       // Also update in registered users database
-      const registeredUsers = getRegisteredUsers();
       const updatedRegistered = registeredUsers.map((u) =>
         u.email.toLowerCase() === updated.email.toLowerCase() ? updated : u
       );
-      localStorage.setItem("foodly_registered_users", JSON.stringify(updatedRegistered));
+      syncRegisteredUsers(updatedRegistered);
 
       return updated;
     });
+  };
+
+  // Admin User Management Operations
+  const addUser = (userData) => {
+    const newUser = {
+      id: `u_${Date.now()}`,
+      name: userData.name,
+      email: userData.email,
+      password: userData.password || "123456",
+      phone: userData.phone || "+92 300 0000000",
+      role: userData.role || "user",
+      addresses: INITIAL_ADDRESSES,
+      paymentMethods: INITIAL_PAYMENT_METHODS
+    };
+    const updated = [...registeredUsers, newUser];
+    syncRegisteredUsers(updated);
+    return newUser;
+  };
+
+  const deleteUser = (userId) => {
+    const updated = registeredUsers.filter((u) => u.id !== userId);
+    syncRegisteredUsers(updated);
+  };
+
+  const toggleUserRole = (userId) => {
+    const updated = registeredUsers.map((u) => {
+      if (u.id === userId) {
+        return { ...u, role: u.role === "admin" ? "user" : "admin" };
+      }
+      return u;
+    });
+    syncRegisteredUsers(updated);
   };
 
   return (
@@ -207,11 +241,15 @@ export function AuthProvider({ children }) {
       value={{
         user,
         isLoggedIn,
+        registeredUsers,
         login,
         signup,
         logout,
         toggleRole,
-        updateUser
+        updateUser,
+        addUser,
+        deleteUser,
+        toggleUserRole
       }}
     >
       {children}

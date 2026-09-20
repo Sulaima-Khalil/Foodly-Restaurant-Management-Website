@@ -18,21 +18,33 @@ export function OrderProvider({ children }) {
     const savedRestaurants = localStorage.getItem("foodly_restaurants");
 
     if (savedOrders) {
-      try { setOrders(JSON.parse(savedOrders)); } catch (e) { setOrders(MOCK_ORDERS); }
+      try {
+        setOrders(JSON.parse(savedOrders));
+      } catch (e) {
+        setOrders(MOCK_ORDERS);
+      }
     } else {
       setOrders(MOCK_ORDERS);
       localStorage.setItem("foodly_orders", JSON.stringify(MOCK_ORDERS));
     }
 
     if (savedMenuItems) {
-      try { setMenuItems(JSON.parse(savedMenuItems)); } catch (e) { setMenuItems(MOCK_MENU_ITEMS); }
+      try {
+        setMenuItems(JSON.parse(savedMenuItems));
+      } catch (e) {
+        setMenuItems(MOCK_MENU_ITEMS);
+      }
     } else {
       setMenuItems(MOCK_MENU_ITEMS);
       localStorage.setItem("foodly_menu_items", JSON.stringify(MOCK_MENU_ITEMS));
     }
 
     if (savedRestaurants) {
-      try { setRestaurants(JSON.parse(savedRestaurants)); } catch (e) { setRestaurants(MOCK_RESTAURANTS); }
+      try {
+        setRestaurants(JSON.parse(savedRestaurants));
+      } catch (e) {
+        setRestaurants(MOCK_RESTAURANTS);
+      }
     } else {
       setRestaurants(MOCK_RESTAURANTS);
       localStorage.setItem("foodly_restaurants", JSON.stringify(MOCK_RESTAURANTS));
@@ -52,6 +64,12 @@ export function OrderProvider({ children }) {
       localStorage.setItem("foodly_menu_items", JSON.stringify(menuItems));
     }
   }, [menuItems, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("foodly_restaurants", JSON.stringify(restaurants));
+    }
+  }, [restaurants, isLoaded]);
 
   // Order Operations
   const placeOrder = (orderData) => {
@@ -94,6 +112,32 @@ export function OrderProvider({ children }) {
     setMenuItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // Restaurant Operations (Admin CRUD)
+  const addRestaurant = (restaurantData) => {
+    const newRestaurant = {
+      id: restaurantData.name ? restaurantData.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now().toString().slice(-4) : `r-${Date.now()}`,
+      rating: parseFloat(restaurantData.rating) || 4.5,
+      reviewCount: parseInt(restaurantData.reviewCount) || 1,
+      featured: Boolean(restaurantData.featured),
+      categories: Array.isArray(restaurantData.categories)
+        ? restaurantData.categories
+        : (restaurantData.categories || "Pizzas, Pastas, Drinks").split(",").map((c) => c.trim()),
+      ...restaurantData
+    };
+    setRestaurants((prev) => [newRestaurant, ...prev]);
+    return newRestaurant;
+  };
+
+  const updateRestaurant = (id, updatedFields) => {
+    setRestaurants((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, ...updatedFields } : r))
+    );
+  };
+
+  const deleteRestaurant = (id) => {
+    setRestaurants((prev) => prev.filter((r) => r.id !== id));
+  };
+
   return (
     <OrderContext.Provider
       value={{
@@ -104,7 +148,10 @@ export function OrderProvider({ children }) {
         updateOrderStatus,
         addMenuItem,
         updateMenuItem,
-        deleteMenuItem
+        deleteMenuItem,
+        addRestaurant,
+        updateRestaurant,
+        deleteRestaurant
       }}
     >
       {children}
