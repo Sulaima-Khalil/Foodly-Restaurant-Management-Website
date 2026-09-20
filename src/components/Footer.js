@@ -1,8 +1,13 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { Utensils, Heart } from "lucide-react";
+import { Utensils, LogOut } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Footer() {
+  const { isLoggedIn, logout } = useAuth();
+
   return (
     <footer style={{ background: "white", borderTop: "1px solid var(--border-color)", padding: "3rem 0 1.5rem" }}>
       <div className="container" style={{ display: "grid", gridTemplateColumns: "1.5fr repeat(3, 1fr)", gap: "2rem", marginBottom: "2rem" }}>
@@ -25,6 +30,27 @@ export default function Footer() {
             <li><Link href="/restaurants">All Restaurants</Link></li>
             <li><Link href="/cart">Your Cart</Link></li>
             <li><Link href="/dashboard">User Account</Link></li>
+            {isLoggedIn && (
+              <li>
+                <button
+                  onClick={logout}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    color: "#ef4444",
+                    fontSize: "0.88rem",
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.4rem",
+                    fontWeight: 600
+                  }}
+                >
+                  <LogOut size={14} /> Logout
+                </button>
+              </li>
+            )}
           </ul>
         </div>
 
