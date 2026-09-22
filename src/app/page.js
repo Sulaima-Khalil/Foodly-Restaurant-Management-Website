@@ -21,7 +21,7 @@ export default function HomePage() {
     }
   };
 
-  const popularRestaurants = restaurants.filter((r) => r.featured);
+  const popularRestaurants = restaurants.filter((r) => r.featured).slice(0, 4);
 
   return (
     <div>
@@ -92,11 +92,11 @@ export default function HomePage() {
           <div className="section-header">
             <h2 className="section-title">Popular Restaurants</h2>
             <Link href="/restaurants" className="view-all-link">
-              View All <ArrowRight size={16} />
+              View More <ArrowRight size={16} />
             </Link>
           </div>
 
-          <div className="restaurants-grid">
+          <div className="restaurants-grid home-restaurants-grid">
             {popularRestaurants.map((restaurant) => (
               <RestaurantCard key={restaurant.id} restaurant={restaurant} />
             ))}

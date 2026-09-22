@@ -610,6 +610,7 @@ input, select, textarea {
 .restaurant-header-content, .restaurant-menu-content { min-width: 0; }
 .restaurant-about-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .restaurants-main { min-width: 0; }
+.home-restaurants-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 .profile-order-list, .profile-card-list {
   display: flex;
@@ -1186,6 +1187,7 @@ input, select, textarea {
   .restaurants-layout .filter-group { margin: 0; }
   .restaurants-layout .checkbox-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .restaurants-layout .restaurants-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-restaurants-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
   .restaurant-menu-layout { grid-template-columns: 1fr; gap: 1.25rem; }
   .category-nav-sidebar { display: flex; gap: .45rem; overflow-x: auto; padding: .65rem; }
   .cat-nav-item { flex: 0 0 auto; white-space: nowrap; }
@@ -1291,6 +1293,13 @@ input, select, textarea {
   .restaurants-layout .restaurants-grid { grid-template-columns: 1fr; gap: .85rem; }
   .restaurants-layout .restaurant-card { min-width: 0; }
   .restaurants-layout .card-title, .restaurants-layout .card-meta span { overflow-wrap: anywhere; }
+  .home-restaurants-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .home-restaurants-grid .restaurant-card { display: flex; flex-direction: column; min-width: 0; }
+  .home-restaurants-grid .card-img-wrapper { height: 112px; min-height: 112px; }
+  .home-restaurants-grid .card-body { padding: .75rem; }
+  .home-restaurants-grid .card-title { font-size: .95rem; overflow-wrap: anywhere; }
+  .home-restaurants-grid .card-meta { align-items: flex-start; flex-direction: column; gap: .35rem; }
+  .home-restaurants-grid .delivery-info { font-size: .75rem; }
   .restaurants-layout .checkbox-item:has(input:checked), .restaurants-layout .radio-item:has(input:checked) {
     color: var(--primary);
     border-color: var(--primary-border);
@@ -1394,6 +1403,8 @@ input, select, textarea {
   .restaurants-layout .checkbox-item, .restaurants-layout .radio-item { font-size: .82rem; }
   .restaurants-layout .restaurant-card { grid-template-columns: 88px minmax(0, 1fr); }
   .restaurants-layout .card-img-wrapper { min-height: 116px; }
+  .home-restaurants-grid .restaurant-card { grid-template-columns: none; }
+  .home-restaurants-grid .card-img-wrapper { min-height: 104px; height: 104px; }
 }
 
 @media (max-width: 390px) {
