@@ -148,9 +148,9 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="container" style={{ paddingTop: "1.5rem", paddingBottom: "3rem" }}>
-      <div className="page-sidebar-layout">
+      <div className="page-sidebar-layout admin-layout">
         {/* Left Admin Sidebar Navigation */}
-        <aside className="dashboard-sidebar-nav">
+        <aside className="dashboard-sidebar-nav admin-sidebar">
           <div
             className="brand-logo"
             style={{
@@ -236,7 +236,7 @@ export default function AdminDashboardPage() {
         </aside>
 
         {/* Main Content Area based on activeTab */}
-        <main style={{ minHeight: "650px" }}>
+        <main className="admin-main" style={{ minHeight: "650px" }}>
           {/* TAB 1: DASHBOARD */}
           {activeTab === "Dashboard" && (
             <div>

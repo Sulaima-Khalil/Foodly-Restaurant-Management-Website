@@ -233,9 +233,9 @@ export default function UserDashboardPage() {
   return (
     <div className="container">
       {/* Screen 8: User Dashboard Layout */}
-      <div className="page-sidebar-layout">
+      <div className="page-sidebar-layout profile-layout">
         {/* Left Dashboard Sidebar */}
-        <aside className="dashboard-sidebar-nav">
+        <aside className="dashboard-sidebar-nav profile-sidebar">
           <div className="dash-user-profile">
             <img
               src={user?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
@@ -290,7 +290,7 @@ export default function UserDashboardPage() {
         </aside>
 
         {/* Main Content Area */}
-        <main>
+        <main className="profile-main">
           {/* CONFIRMATION CARD NOTICE */}
           {confirmationNotice && (
             <div
@@ -336,10 +336,10 @@ export default function UserDashboardPage() {
 
           {/* TAB 1: MY ORDERS & DASHBOARD */}
           {(activeNav === "My Orders" || activeNav === "Dashboard") && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div className="profile-order-list">
               {userOrders.map((order) => (
-                <div key={order.id} style={{ background: "white", borderRadius: "12px", border: "1px solid var(--border-color)", padding: "1.5rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+                <div key={order.id} className="profile-order-card">
+                  <div className="profile-order-header">
                     <div>
                       <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--primary)" }}>#{order.id}</h4>
                       <span style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>{order.restaurantName || "Pizza Paradise"}</span>
@@ -355,7 +355,7 @@ export default function UserDashboardPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.8rem", borderTop: "1px solid var(--border-light)" }}>
+                  <div className="profile-order-footer">
                     <span style={{ fontSize: "1.1rem", fontWeight: 800 }}>${order.total.toFixed(2)}</span>
 
                     <button
@@ -368,7 +368,7 @@ export default function UserDashboardPage() {
 
                   {/* Expanded Item Details */}
                   {expandedOrderId === order.id && (
-                    <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px dashed var(--border-color)", background: "var(--bg-main)", padding: "1rem", borderRadius: "8px" }}>
+                    <div className="profile-order-details">
                       <h5 style={{ fontSize: "0.88rem", fontWeight: 700, marginBottom: "0.6rem" }}>Ordered Items:</h5>
                       <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.85rem" }}>
                         {order.items?.map((item, idx) => (
@@ -393,7 +393,7 @@ export default function UserDashboardPage() {
             <div>
               {/* Add / Edit Address Form */}
               {isAddressFormOpen && (
-                <div style={{ background: "white", padding: "1.8rem", borderRadius: "12px", border: "1px solid var(--primary-border)", marginBottom: "2rem", boxShadow: "var(--shadow-sm)" }}>
+                <div className="profile-form-card">
                   <h3 style={{ fontSize: "1.15rem", fontWeight: 700, marginBottom: "1.2rem", color: "var(--primary)" }}>
                     {editingAddressId ? "Edit Delivery Address" : "Add New Delivery Address"}
                   </h3>
@@ -474,9 +474,9 @@ export default function UserDashboardPage() {
               )}
 
               {/* Address Cards List */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+              <div className="profile-card-list">
                 {addresses.map((addr) => (
-                  <div
+                  <div className="profile-address-card"
                     key={addr.id}
                     style={{
                       background: "white",
@@ -554,7 +554,7 @@ export default function UserDashboardPage() {
             <div>
               {/* Add Payment Method Form */}
               {isPaymentFormOpen && (
-                <div style={{ background: "white", padding: "1.8rem", borderRadius: "12px", border: "1px solid var(--primary-border)", marginBottom: "2rem", boxShadow: "var(--shadow-sm)" }}>
+                <div className="profile-form-card">
                   <h3 style={{ fontSize: "1.15rem", fontWeight: 700, marginBottom: "1.2rem", color: "var(--primary)" }}>
                     Add New Payment Method
                   </h3>
@@ -649,9 +649,9 @@ export default function UserDashboardPage() {
               )}
 
               {/* Payment Method Cards */}
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div className="profile-card-list">
                 {paymentMethods.map((pm) => (
-                  <div
+                  <div className="profile-payment-card"
                     key={pm.id}
                     style={{
                       background: "white",
@@ -711,7 +711,7 @@ export default function UserDashboardPage() {
 
           {/* TAB 4: SETTINGS */}
           {activeNav === "Settings" && (
-            <div style={{ background: "white", padding: "2rem", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
+            <div className="profile-settings-card">
               <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "1.2rem" }}>Account Settings</h3>
               <form onSubmit={handleSaveSettings}>
                 <div className="form-group">

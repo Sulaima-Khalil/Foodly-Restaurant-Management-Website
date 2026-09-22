@@ -11,16 +11,16 @@ export default function AboutPage() {
   return (
     <div className="container" style={{ paddingTop: "2.5rem" }}>
       {/* Hero Banner Section */}
-      <div style={{ background: "white", borderRadius: "20px", border: "1px solid var(--border-color)", padding: "3.5rem 2rem", textAlign: "center", marginBottom: "3rem", boxShadow: "var(--shadow-sm)" }}>
+      <div className="about-hero-card">
         <span className="hero-tag">About Foodly</span>
-        <h1 style={{ fontSize: "2.8rem", fontWeight: 800, marginBottom: "1rem", color: "var(--text-main)", letterSpacing: "-0.5px" }}>
+        <h1 className="about-page-title" style={{ fontWeight: 800, marginBottom: "1rem", color: "var(--text-main)", letterSpacing: "-0.5px" }}>
           Good Food, <span style={{ color: "var(--primary)" }}>Good Mood</span>
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: "1.1rem", maxWidth: "680px", margin: "0 auto 2rem", lineHeight: 1.6 }}>
           Foodly was founded with a simple goal: connecting food lovers with the best local chefs and restaurants in town, delivering piping hot, delicious meals fast and hassle-free.
         </p>
 
-        <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}>
+        <div className="about-actions">
           <Link href="/restaurants" className="btn-primary">
             Explore Restaurants
           </Link>
@@ -31,7 +31,7 @@ export default function AboutPage() {
       </div>
 
       {/* Values & Stats Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.8rem", marginBottom: "3.5rem" }}>
+      <div className="about-values-grid">
         <div style={{ background: "white", padding: "2rem", borderRadius: "16px", border: "1px solid var(--border-color)", textAlign: "center" }}>
           <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "var(--primary-light)", color: "var(--primary)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.2rem" }}>
             <Zap size={26} />

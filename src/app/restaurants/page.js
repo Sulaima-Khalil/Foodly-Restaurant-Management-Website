@@ -39,7 +39,7 @@ function RestaurantsContent() {
   }, [restaurants, selectedCuisine, search, sortBy]);
 
   return (
-    <div className="page-sidebar-layout">
+    <div className="page-sidebar-layout restaurants-layout">
       {/* Left Sidebar Filter (Screen 2) */}
       <aside className="filter-sidebar">
         {/* Search Box */}
@@ -94,8 +94,8 @@ function RestaurantsContent() {
       </aside>
 
       {/* Main Content Area */}
-      <main>
-        <div className="section-header" style={{ marginBottom: "1.5rem" }}>
+      <main className="restaurants-main">
+        <div className="section-header restaurants-results-header" style={{ marginBottom: "1.5rem" }}>
           <div>
             <h1 className="section-title">All Restaurants</h1>
             <span style={{ color: "var(--text-muted)", fontSize: "0.88rem" }}>

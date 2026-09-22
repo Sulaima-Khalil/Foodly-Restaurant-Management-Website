@@ -23,9 +23,9 @@ export default function ContactPage() {
 
   return (
     <div className="container" style={{ paddingTop: "2.5rem" }}>
-      <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+      <div className="contact-page-heading">
         <span className="hero-tag">Contact Us</span>
-        <h1 style={{ fontSize: "2.6rem", fontWeight: 800, color: "var(--text-main)", marginBottom: "0.5rem" }}>
+        <h1 className="contact-page-title" style={{ fontWeight: 800, color: "var(--text-main)", marginBottom: "0.5rem" }}>
           We&apos;d Love to <span style={{ color: "var(--primary)" }}>Hear From You</span>
         </h1>
         <p style={{ color: "var(--text-muted)", fontSize: "1rem" }}>
@@ -33,7 +33,7 @@ export default function ContactPage() {
         </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.3fr", gap: "2.5rem", marginBottom: "4rem" }}>
+      <div className="contact-layout">
         {/* Contact Information Sidebar */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
           <div style={{ background: "white", padding: "1.5rem", borderRadius: "14px", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", gap: "1.2rem" }}>
@@ -78,7 +78,7 @@ export default function ContactPage() {
         </div>
 
         {/* Contact Form */}
-        <div style={{ background: "white", padding: "2.2rem", borderRadius: "16px", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+        <div className="contact-form-card">
           <h3 style={{ fontSize: "1.3rem", fontWeight: 700, marginBottom: "1.5rem" }}>Send Us a Message</h3>
 
           {submitted && (

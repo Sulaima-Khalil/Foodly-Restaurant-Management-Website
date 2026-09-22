@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingBag, User, Shield, Utensils } from "lucide-react";
+import { ShoppingBag, User, Shield, Utensils, Menu, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 
@@ -11,6 +11,7 @@ export default function Header() {
   const pathname = usePathname();
   const { user, isLoggedIn, toggleRole } = useAuth();
   const { itemCount } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isActive = (path) => pathname === path;
 
@@ -26,7 +27,16 @@ export default function Header() {
         </Link>
 
         {/* Dynamic Navigation Links based on Auth State */}
-        <nav>
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMenuOpen}
+        >
+          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+
+        <nav className={`main-nav ${isMenuOpen ? "is-open" : ""}`} onClick={() => setIsMenuOpen(false)}>
           <ul className="nav-links">
             <li>
               <Link href="/" className={`nav-link ${isActive("/") ? "active" : ""}`}>

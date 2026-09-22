@@ -35,7 +35,7 @@ export default function RestaurantDetailPage({ params }) {
   };
 
   return (
-    <div className="container" style={{ paddingTop: "2rem" }}>
+    <div className="container restaurant-detail-page" style={{ paddingTop: "2rem" }}>
       {/* Restaurant Header Banner Card (Screen 3) */}
       <div className="menu-details-header">
         <img
@@ -45,7 +45,7 @@ export default function RestaurantDetailPage({ params }) {
         />
 
         <div className="menu-header-body">
-          <div>
+          <div className="restaurant-header-content">
             <h1 className="restaurant-detail-title">{restaurant.name}</h1>
             <p className="restaurant-detail-sub">
               {restaurant.cuisine} • {restaurant.priceTier}
@@ -84,7 +84,7 @@ export default function RestaurantDetailPage({ params }) {
       </div>
 
       {activeTab === "Menu" ? (
-        <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: "2rem" }}>
+        <div className="restaurant-menu-layout">
           {/* Left Category Navigation Sidebar */}
           <aside className="category-nav-sidebar">
             {categories.map((cat) => (
@@ -99,7 +99,7 @@ export default function RestaurantDetailPage({ params }) {
           </aside>
 
           {/* Menu Items List Area */}
-          <main>
+          <main className="restaurant-menu-content">
             <h3 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "1rem" }}>
               {activeCategory}
             </h3>
@@ -143,14 +143,14 @@ export default function RestaurantDetailPage({ params }) {
         </div>
       ) : (
         /* About Tab Content */
-        <div style={{ background: "white", padding: "2rem", borderRadius: "12px", border: "1px solid var(--border-color)" }}>
+        <div className="restaurant-about-card">
           <h3 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.8rem" }}>
             About {restaurant.name}
           </h3>
           <p style={{ color: "var(--text-muted)", lineHeight: 1.6, marginBottom: "1.5rem" }}>
             {restaurant.description}
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", borderTop: "1px solid var(--border-light)", paddingTop: "1rem" }}>
+          <div className="restaurant-about-stats" style={{ borderTop: "1px solid var(--border-light)", paddingTop: "1rem" }}>
             <div>
               <strong style={{ display: "block", fontSize: "0.85rem", color: "var(--text-muted)" }}>CUISINE</strong>
               <span>{restaurant.cuisine}</span>
