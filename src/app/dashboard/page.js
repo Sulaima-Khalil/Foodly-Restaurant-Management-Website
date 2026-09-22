@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, ShoppingBag, MapPin, CreditCard, Settings, LogOut, ChevronRight, Plus, Edit2, Trash2, CheckCircle2, ShieldCheck, X } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, MapPin, CreditCard, Settings, LogOut, ChevronRight, Plus, Edit2, Trash2, CheckCircle2, ShieldCheck, X, Camera } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useOrders } from "@/context/OrderContext";
 import LogoutModal from "@/components/LogoutModal";
@@ -11,9 +11,12 @@ export default function UserDashboardPage() {
   const router = useRouter();
   const { user, logout, updateUser } = useAuth();
   const { orders } = useOrders();
-  const [activeNav, setActiveNav] = useState("My Orders");
+  const [activeNav, setActiveNav] = useState("Dashboard");
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const photoInputRef = useRef(null);
+  const [pendingPhoto, setPendingPhoto] = useState(null);
+  const [photoError, setPhotoError] = useState("");
 
   const handleConfirmLogout = () => {
     logout();
@@ -64,6 +67,8 @@ export default function UserDashboardPage() {
   };
 
   const userOrders = orders.filter((o) => o.customerEmail === user?.email || true);
+  const activeOrdersCount = userOrders.filter((o) => o.status === "Preparing" || o.status === "Out for Delivery").length;
+  const totalSpent = userOrders.reduce((total, order) => total + (order.total || 0), 0);
 
   // --- ADDRESS HANDLERS ---
   const handleOpenAddAddress = () => {
@@ -227,7 +232,34 @@ export default function UserDashboardPage() {
   // --- SETTINGS HANDLER ---
   const handleSaveSettings = (e) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    updateUser({
+      name: formData.get("name")?.trim() || user?.name,
+      email: formData.get("email")?.trim() || user?.email,
+      phone: formData.get("phone")?.trim() || user?.phone,
+      ...(pendingPhoto ? { avatar: pendingPhoto } : {})
+    });
+    setPendingPhoto(null);
     showConfirmation("Account profile settings saved successfully!");
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setPhotoError("Please choose an image file.");
+      return;
+    }
+    if (file.size > 800 * 1024) {
+      setPhotoError("Please choose an image smaller than 800 KB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPendingPhoto(reader.result);
+      setPhotoError("");
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -245,6 +277,7 @@ export default function UserDashboardPage() {
             <div>
               <h4 style={{ fontWeight: 700, fontSize: "0.95rem" }}>{user?.name || "Sulaima Khalil"}</h4>
               <span style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>{user?.email || "sulaima@email.com"}</span>
+              <button className="change-profile-photo-link" onClick={() => setActiveNav("Settings")}>Change profile photo</button>
             </div>
           </div>
 
@@ -334,8 +367,56 @@ export default function UserDashboardPage() {
             )}
           </div>
 
-          {/* TAB 1: MY ORDERS & DASHBOARD */}
-          {(activeNav === "My Orders" || activeNav === "Dashboard") && (
+          {/* TAB 1: DASHBOARD OVERVIEW */}
+          {activeNav === "Dashboard" && (
+            <div className="profile-dashboard-overview">
+              <div className="profile-welcome-card">
+                <div>
+                  <span className="hero-tag">Your Foodly account</span>
+                  <h2>Welcome back, {user?.name?.split(" ")[0] || "there"}!</h2>
+                  <p>Track your latest orders and manage your delivery details in one place.</p>
+                </div>
+                <button className="btn-primary" onClick={() => setActiveNav("My Orders")}>View My Orders</button>
+              </div>
+
+              <div className="profile-summary-grid">
+                <div className="profile-summary-card">
+                  <ShoppingBag size={20} />
+                  <div><span>Total Orders</span><strong>{userOrders.length}</strong></div>
+                </div>
+                <div className="profile-summary-card">
+                  <ChevronRight size={20} />
+                  <div><span>Active Orders</span><strong>{activeOrdersCount}</strong></div>
+                </div>
+                <div className="profile-summary-card">
+                  <CreditCard size={20} />
+                  <div><span>Total Spent</span><strong>${totalSpent.toFixed(2)}</strong></div>
+                </div>
+              </div>
+
+              <div className="profile-recent-section">
+                <div className="section-header">
+                  <div>
+                    <h3>Recent Orders</h3>
+                    <p>Your latest Foodly activity</p>
+                  </div>
+                  <button className="view-all-link" onClick={() => setActiveNav("My Orders")}>View all <ChevronRight size={16} /></button>
+                </div>
+                <div className="profile-recent-list">
+                  {userOrders.slice(0, 3).map((order) => (
+                    <div key={order.id} className="profile-recent-order">
+                      <div><strong>#{order.id}</strong><span>{order.restaurantName || "Pizza Paradise"}</span></div>
+                      <span className={`status-pill ${getStatusClass(order.status)}`}>{order.status}</span>
+                      <strong>${order.total.toFixed(2)}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: COMPLETE ORDER HISTORY */}
+          {activeNav === "My Orders" && (
             <div className="profile-order-list">
               {userOrders.map((order) => (
                 <div key={order.id} className="profile-order-card">
@@ -714,17 +795,39 @@ export default function UserDashboardPage() {
             <div className="profile-settings-card">
               <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "1.2rem" }}>Account Settings</h3>
               <form onSubmit={handleSaveSettings}>
+                <div className="profile-photo-control">
+                  <img
+                    src={pendingPhoto || user?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"}
+                    alt="Profile preview"
+                    className="profile-photo-preview"
+                  />
+                  <div>
+                    <span className="form-label">Profile Photo</span>
+                    <p className="profile-photo-help">Upload a JPG, PNG, or WebP image up to 800 KB.</p>
+                    <input
+                      ref={photoInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      onChange={handlePhotoChange}
+                      className="profile-photo-input"
+                    />
+                    <button type="button" className="btn-secondary profile-photo-button" onClick={() => photoInputRef.current?.click()}>
+                      <Camera size={16} /> Choose Photo
+                    </button>
+                    {photoError && <p className="profile-photo-error">{photoError}</p>}
+                  </div>
+                </div>
                 <div className="form-group">
                   <label className="form-label">Full Name</label>
-                  <input type="text" className="form-input" defaultValue={user?.name || "Sulaima Khalil"} />
+                  <input name="name" type="text" className="form-input" defaultValue={user?.name || "Sulaima Khalil"} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Email Address</label>
-                  <input type="email" className="form-input" defaultValue={user?.email || "sulaima@email.com"} />
+                  <input name="email" type="email" className="form-input" defaultValue={user?.email || "sulaima@email.com"} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Phone Number</label>
-                  <input type="text" className="form-input" defaultValue={user?.phone || "+92 300 1234567"} />
+                  <input name="phone" type="text" className="form-input" defaultValue={user?.phone || "+92 300 1234567"} />
                 </div>
                 <button type="submit" className="btn-primary" style={{ marginTop: "1rem" }}>
                   Save Profile Settings

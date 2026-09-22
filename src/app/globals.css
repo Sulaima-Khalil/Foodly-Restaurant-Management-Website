@@ -636,6 +636,30 @@ input, select, textarea {
 .profile-order-details { margin-top: 1rem; padding: 1rem; border-radius: var(--radius-sm); border-top: 1px dashed var(--border-color); background: var(--bg-main); }
 .profile-form-card { background: white; padding: 1.8rem; border-radius: var(--radius-md); border: 1px solid var(--primary-border); margin-bottom: 2rem; box-shadow: var(--shadow-sm); }
 .profile-settings-card { background: white; padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
+.profile-photo-control { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-light); }
+.profile-photo-preview { width: 76px; height: 76px; flex: 0 0 auto; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-light); }
+.profile-photo-help { color: var(--text-muted); font-size: .82rem; margin: -.15rem 0 .6rem; }
+.profile-photo-input { display: none; }
+.profile-photo-button { padding: .5rem .8rem; font-size: .85rem; }
+.profile-photo-error { color: #dc2626; font-size: .8rem; margin-top: .45rem; }
+.change-profile-photo-link { display: block; margin-top: .25rem; color: var(--primary); font-size: .74rem; font-weight: 600; text-align: left; }
+.profile-dashboard-overview { display: flex; flex-direction: column; gap: 1.5rem; }
+.profile-welcome-card { background: linear-gradient(135deg, #fff7f4, #fff); border: 1px solid var(--primary-border); border-radius: var(--radius-lg); padding: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.profile-welcome-card .hero-tag { margin-bottom: .4rem; }
+.profile-welcome-card h2 { font-size: 1.5rem; margin-bottom: .35rem; }
+.profile-welcome-card p, .profile-recent-section p { color: var(--text-muted); font-size: .9rem; }
+.profile-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.profile-summary-card { background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.1rem; display: flex; align-items: center; gap: .8rem; color: var(--primary); }
+.profile-summary-card > div { min-width: 0; color: var(--text-main); }
+.profile-summary-card span { display: block; color: var(--text-muted); font-size: .8rem; }
+.profile-summary-card strong { display: block; font-size: 1.2rem; overflow-wrap: anywhere; }
+.profile-recent-section { background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; }
+.profile-recent-section .section-header { margin-bottom: 1rem; }
+.profile-recent-section h3 { font-size: 1.05rem; }
+.profile-recent-list { display: flex; flex-direction: column; }
+.profile-recent-order { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem; padding: .9rem 0; border-top: 1px solid var(--border-light); font-size: .9rem; }
+.profile-recent-order > div { min-width: 0; }
+.profile-recent-order > div span { display: block; color: var(--text-muted); font-size: .82rem; overflow-wrap: anywhere; }
 
 .admin-main, .profile-main { min-width: 0; }
 
@@ -1346,6 +1370,14 @@ input, select, textarea {
   .profile-order-footer { gap: .75rem; }
   .profile-order-details { padding: .8rem; overflow-wrap: anywhere; }
   .profile-form-card, .profile-settings-card { padding: 1.25rem !important; }
+  .profile-photo-control { align-items: flex-start; }
+  .profile-welcome-card { padding: 1.25rem; align-items: flex-start; flex-direction: column; }
+  .profile-welcome-card .btn-primary { width: 100%; }
+  .profile-summary-grid { grid-template-columns: 1fr; gap: .75rem; }
+  .profile-recent-section { padding: 1rem; }
+  .profile-recent-order { grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; }
+  .profile-recent-order > strong { grid-column: 2; grid-row: 1; }
+  .profile-recent-order .status-pill { grid-column: 1; grid-row: 2; width: fit-content; }
   .profile-form-card div[style*="display: flex"][style*="margin-top"] { flex-wrap: wrap; }
   .profile-address-card > div:first-child { align-items: flex-start !important; gap: .5rem; }
   .profile-address-card > div:first-child > div:first-child { min-width: 0; flex-wrap: wrap; }

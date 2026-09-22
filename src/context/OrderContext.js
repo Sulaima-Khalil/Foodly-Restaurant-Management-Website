@@ -19,7 +19,8 @@ export function OrderProvider({ children }) {
 
     if (savedOrders) {
       try {
-        setOrders(JSON.parse(savedOrders));
+        const parsedOrders = JSON.parse(savedOrders);
+        setOrders(Array.isArray(parsedOrders) && parsedOrders.length > 0 ? parsedOrders : MOCK_ORDERS);
       } catch (e) {
         setOrders(MOCK_ORDERS);
       }
@@ -30,7 +31,8 @@ export function OrderProvider({ children }) {
 
     if (savedMenuItems) {
       try {
-        setMenuItems(JSON.parse(savedMenuItems));
+        const parsedMenuItems = JSON.parse(savedMenuItems);
+        setMenuItems(Array.isArray(parsedMenuItems) && parsedMenuItems.length > 0 ? parsedMenuItems : MOCK_MENU_ITEMS);
       } catch (e) {
         setMenuItems(MOCK_MENU_ITEMS);
       }
@@ -41,7 +43,8 @@ export function OrderProvider({ children }) {
 
     if (savedRestaurants) {
       try {
-        setRestaurants(JSON.parse(savedRestaurants));
+        const parsedRestaurants = JSON.parse(savedRestaurants);
+        setRestaurants(Array.isArray(parsedRestaurants) && parsedRestaurants.length > 0 ? parsedRestaurants : MOCK_RESTAURANTS);
       } catch (e) {
         setRestaurants(MOCK_RESTAURANTS);
       }
